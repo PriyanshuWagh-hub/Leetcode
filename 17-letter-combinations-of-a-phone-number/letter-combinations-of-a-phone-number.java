@@ -1,43 +1,33 @@
-import java.util.*;
-
 class Solution {
-
     public List<String> letterCombinations(String digits) {
+        List<String> ans = new ArrayList<>();
 
-        List<String> result = new ArrayList<>();
+        if (digits == null || digits.length() == 0)
+            return ans;
 
-        if (digits == null || digits.length() == 0) {
-            return result;
-        }
-
-        String[] mapping = {
-            "", "", "abc", "def", "ghi", "jkl",
-            "mno", "pqrs", "tuv", "wxyz"
+        String[] map = {
+            "", "", "abc", "def", "ghi",
+            "jkl", "mno", "pqrs", "tuv", "wxyz"
         };
 
-        backtrack(result, digits, 0, new StringBuilder(), mapping);
-
-        return result;
+        backtrack(digits, 0, "", map, ans);
+        return ans;
     }
 
-    private void backtrack(List<String> result,
-                           String digits,
-                           int index,
-                           StringBuilder current,
-                           String[] mapping) {
+    private void backtrack(String digits, int index, String current,
+                           String[] map, List<String> ans) {
 
-        // base case
         if (index == digits.length()) {
-            result.add(current.toString());
+            ans.add(current);
             return;
         }
 
-        String letters = mapping[digits.charAt(index) - '0'];
+        String letters = map[digits.charAt(index) - '0'];
 
-        for (char ch : letters.toCharArray()) {
-            current.append(ch);
-            backtrack(result, digits, index + 1, current, mapping);
-            current.deleteCharAt(current.length() - 1); // backtrack
+        for (int i = 0; i < letters.length(); i++) {
+            backtrack(digits, index + 1,
+                    current + letters.charAt(i),
+                    map, ans);
         }
     }
 }
